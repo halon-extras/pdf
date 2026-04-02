@@ -38,6 +38,7 @@ echo "${SHA256} go1.26.1.${TARGETOS}-${TARGETARCH}.tar.gz" | sha256sum -c
 tar -C /usr/local -xzf go1.26.1.${TARGETOS}-${TARGETARCH}.tar.gz
 EOF
 RUN /usr/local/go/bin/go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@latest
+RUN /usr/local/go/bin/go install github.com/google/go-licenses/v2@latest
 ENV PATH="$PATH:/usr/local/go/bin:/root/go/bin"
 
 RUN mkdir /licenses
