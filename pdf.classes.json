@@ -1,0 +1,65 @@
+[
+    {
+        "name": "PDF",
+        "instantiable": true,
+        "parameters": {
+            "required": [
+                {
+                    "name": "data",
+                    "type": "string"
+                }
+            ],
+            "optional": [
+                {
+                    "name": "options",
+                    "type": "array"
+                }
+            ]
+        },
+        "methods": [
+            {
+                "name": "AddAttachment",
+                "parameters": {
+                    "required": [
+                        {
+                            "name": "name",
+                            "type": "string"
+                        },
+                        {
+                            "name": "data",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": [
+                        {
+                            "name": "options",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "returnType": "PDF",
+                "detail": "PDF->addAttachment(string $name, string $data, [array $options]): PDF",
+                "value": "addAttachment($0)",
+                "documentation": "Add an attachment to the PDF. On error an exception is thrown.",
+                "link": "[Full documentation](https://github.com/halon-extras/pdf)"
+            },
+            {
+                "name": "toString",
+                "parameters": {
+                    "required": [],
+                    "optional": [
+                        {
+                            "name": "options",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "returnType": "string",
+                "detail": "PDF->toString([array $options]): string",
+                "value": "toString($0)",
+                "documentation": "Return PDF as string. On error an exception is thrown.",
+                "link": "[Full documentation](https://github.com/halon-extras/pdf)"
+            }
+        ]
+    }
+]

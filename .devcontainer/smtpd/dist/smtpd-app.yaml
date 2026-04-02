@@ -1,0 +1,168 @@
+resolver:
+  cache:
+    size: 10000
+scripting:
+  files:
+  - data: "Delivered-To: fredrik@halon.io\nReceived: by 2002:a05:6022:51a2:b0:f1:b96d:3088\
+      \ with SMTP id v34csp1492242lav;\n        Mon, 30 Mar 2026 05:52:13 -0700 (PDT)\n\
+      X-Forwarded-Encrypted: i=2; AJvYcCV+7Qh7sBLNuMgZf5cEUSaHi33kG/HfSxsWulybnyKBJQwTyqVfgoyQIBMXzroVfFi2jUi4x8DO@halon.io\n\
+      X-Received: by 2002:a05:6512:3b0b:b0:5a2:b259:5575 with SMTP id 2adb3069b0e04-5a2b2595761mr2669626e87.45.1774875133329;\n\
+      \        Mon, 30 Mar 2026 05:52:13 -0700 (PDT)\nARC-Seal: i=1; a=rsa-sha256;\
+      \ t=1774875133; cv=none;\n        d=google.com; s=arc-20240605;\n        b=Qkh8rry04LtXeBZEz06LGx9vL+R/8ccdf3km2FudJP9iKVrtkDp3qJLizI2FERxx56\n\
+      \         CGnvWgYle4JIoNOD3GS+eTQhU7A85sEhLla/pr5rveHNNC2YAl1uLkDDb9Wulca8wBBs\n\
+      \         pabQJNCxidKi+0DObh/edOh7OCexmo1EVQY8tizBrlnDQb+gbM631j+YkSXa6m7wAC7D\n\
+      \         +/Xtn1X+G2sFNhvL+IBDr6cmqkXjSPCWvMPjnD1FOzzuN7smMmxb8borhF+/tdswyPrP\n\
+      \         qbV9UtVvTKtPZ8GA/WZkAVjxYnEtrvGpa8A8gXTX1gzgfPo58s93hgzOzgswuPUrMhEK\n\
+      \         GC5w==\nARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;\
+      \ d=google.com; s=arc-20240605;\n        h=destinations:list-unsubscribe-post:list-unsubscribe:list-post\n\
+      \         :list-archive:list-id:precedence:content-transfer-encoding\n     \
+      \    :mime-version:subject:message-id:cc:to:reply-to:from:date\n         :dkim-signature:expurgate-id:expurgate-info;\n\
+      \        bh=jkQ0pV4ZLienKZ9IFnVmcytReFuKxw64FwbtXe6kbEk=;\n        fh=tZ+WEW2pQc9wsvcHs8e31V492Xu9wMnf9kvihCZRhIs=;\n\
+      \        b=epq91h9wfCS3h09YDdFgEeMmOXWeaMyYkhKMVWOms7/N1ErJhcYPVdb1pXcaNI/Ngm\n\
+      \         mAgqfad59nFFLvYBdnrkKk2Tun7uhL5w9KWxB/nfFifItDmmKg4dnNw0mcv+aq1brDTz\n\
+      \         1Pd32VCmFeI/In/8xVqDyolpsMxvIlm/ZRSzQTCdJ8gJwfq56o0bBsFsgW9N5PRx4l4r\n\
+      \         3EUozZdtcjsr9y+FVQO0aZMimvzMh3LsBIEyHTEZAaWFuTsSI6d56/NDfZwCBklJvnTN\n\
+      \         reYntNHEdDySgs6rU9YHPLQ4r48Er1GVqPk5qwhXgHx3Uq3YeGRtkH6m98CxBR4m61Vb\n\
+      \         9KMg==;\n        dara=google.com\nARC-Authentication-Results: i=1;\
+      \ mx.google.com;\n       dkim=pass header.i=@github.com header.s=pf2023 header.b=OWFuKTK3;\n\
+      \       spf=pass (google.com: domain of noreply@github.com designates 192.30.252.193\
+      \ as permitted sender) smtp.mailfrom=noreply@github.com\nReturn-Path: <noreply@github.com>\n\
+      Received: from mx2.halon.io (mx2.halon.io. [188.126.83.24])\n        by mx.google.com\
+      \ with ESMTPS id 38308e7fff4ca-38c837194cfsi27763861fa.112.2026.03.30.05.52.13\n\
+      \        for <fredrik@halon.io>\n        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384\
+      \ bits=256/256);\n        Mon, 30 Mar 2026 05:52:13 -0700 (PDT)\nReceived-SPF:\
+      \ pass (google.com: domain of noreply@github.com designates 192.30.252.193 as\
+      \ permitted sender) client-ip=192.30.252.193;\nAuthentication-Results: mx.google.com;\n\
+      \       dkim=pass header.i=@github.com header.s=pf2023 header.b=OWFuKTK3;\n\
+      \       spf=pass (google.com: domain of noreply@github.com designates 192.30.252.193\
+      \ as permitted sender) smtp.mailfrom=noreply@github.com\neXpurgate-Info: {\"\
+      spam\":false,\"score\":0.1,\"threshold\":10,\"category\":\"suspect\",\"id\"\
+      :\"155819::1774875133-6CC76B8F-64E09A0F\\/19\\/8695114599\"}\neXpurgate-ID:\
+      \ 155819::1774875133-6CC76B8F-64E09A0F/19/8695114599\nReceived: from out-2.smtp.github.com\
+      \ (unknown [192.30.252.193])\n\tby mx2.halon.io (Halon) with ESMTPS\n\tid 450d68d0-2c37-11f1-aad0-12d020010201;\n\
+      \tMon, 30 Mar 2026 12:52:12 +0000 (UTC)\nReceived: from github.com (hubbernetes-node-b79a937.va3-iad.github.net\
+      \ [10.51.89.37])\n\tby smtp.github.com (Postfix) with ESMTPA id 97D862C1065\n\
+      \tfor <fredrik@halon.se>; Mon, 30 Mar 2026 05:52:11 -0700 (PDT)\nDKIM-Signature:\
+      \ v=1; a=rsa-sha256; c=relaxed/relaxed; d=github.com;\n\ts=pf2023; t=1774875131;\n\
+      \tbh=jkQ0pV4ZLienKZ9IFnVmcytReFuKxw64FwbtXe6kbEk=;\n\th=Date:From:Reply-To:To:Cc:Subject:List-ID:List-Archive:List-Post:\n\
+      \t List-Unsubscribe:List-Unsubscribe-Post:From;\n\tb=OWFuKTK3+sAwYLi6G9hWd7QLkBHAfl+UbeePgRX78VHK3wZebpSMJ3OWf0qlCdP0J\n\
+      \t 7FB1L2/ETaOoSyTg9VOy8LoPcdJu0uWPIxylozeWEHXTAkiwaDlkM/RgApXIkuOoE7\n\t gdA/uyHQf27PJhhSEjezbekUnFZHJmTs4MPKoB5I=\n\
+      Date: Mon, 30 Mar 2026 05:52:11 -0700\nFrom: tuck1s <notifications@github.com>\n\
+      Reply-To: halon/engage-demo <reply+ACNIJAUOCMK4SNIFT73FCETKIO57XEVBNHHPRFGAVA@reply.github.com>\n\
+      To: halon/engage-demo <engage-demo@noreply.github.com>\nCc: Subscribed <subscribed@noreply.github.com>\n\
+      Message-ID: <halon/engage-demo/pull/35@github.com>\nSubject: [halon/engage-demo]\
+      \ add missing service restart (PR #35)\nMime-Version: 1.0\nContent-Type: multipart/alternative;\n\
+      \ boundary=\"--==_mimepart_69ca71fb956e1_a81108252097\";\n charset=UTF-8\nContent-Transfer-Encoding:\
+      \ 7bit\nPrecedence: list\nX-GitHub-Sender: tuck1s\nX-GitHub-Recipient: fredriklengstrand\n\
+      X-GitHub-Reason: subscribed\nList-ID: halon/engage-demo <engage-demo.halon.github.com>\n\
+      List-Archive: https://github.com/halon/engage-demo\nList-Post: <mailto:reply+ACNIJAUOCMK4SNIFT73FCETKIO57XEVBNHHPRFGAVA@reply.github.com>\n\
+      List-Unsubscribe: <mailto:unsub+ACNIJAUOCMK4SNIFT73FCETKIO57XEVBNHHPRFGAVA@reply.github.com>,\n\
+      \ <https://github.com/notifications/unsubscribe/one-click/ACNIJAVMDUA6ZJMO7Q3VKCL4TJUXXANCNFSM6AAAAACXGDXZAE>\n\
+      List-Unsubscribe-Post: List-Unsubscribe=One-Click\nX-GitHub-Notify-Platform:\
+      \ newsies\nX-GitHub-Labels: \nX-GitHub-Assignees: \nX-GitHub-PullRequestStatus:\
+      \ open\nX-Auto-Response-Suppress: All\ndestinations: fredrik@halon.se\nX-GitHub-Recipient-Address:\
+      \ fredrik@halon.se\n\n\n----==_mimepart_69ca71fb956e1_a81108252097\nContent-Type:\
+      \ text/plain;\n charset=UTF-8\nContent-Transfer-Encoding: 7bit\n\n\nYou can\
+      \ view, comment on, or merge this pull request online at:\n\n  https://github.com/halon/engage-demo/pull/35?email_source=notifications&amp;email_token=ACNIJAVSRNEIN4HA2VQJ3PT4TJUXXA5CNFSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLBONXW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVVYHEX3POBSW4X3DNRUWG2Y\n\
+      \n-- Commit Summary --\n\n  * add missing service restart\n\n-- File Changes\
+      \ --\n\n    M updateServer.sh (2)\n\n-- Patch Links --\n\nhttps://github.com/halon/engage-demo/pull/35.patch?email_source=notifications&amp;email_token=ACNIJAXCAJHIBDHJWUPAXXL4TJUXXA5CNFSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLBONXW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVZYHEX3QMF2GG2C7MNWGSY3Lhttps://github.com/halon/engage-demo/pull/35.diff?email_source=notifications&amp;email_token=ACNIJAVYK4AT5C7DWRQXKY34TJUXXA5CNFSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLBONXW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVVYHEX3ENFTGMX3DNRUWG2Y\n\
+      -- \nReply to this email directly or view it on GitHub:\nhttps://github.com/halon/engage-demo/pull/35\n\
+      You are receiving this because you are subscribed to this thread.\n\nMessage\
+      \ ID: &lt;halon/engage-demo/pull/35@github.com&gt;\n\n----==_mimepart_69ca71fb956e1_a81108252097\n\
+      Content-Type: text/html;\n charset=UTF-8\nContent-Transfer-Encoding: quoted-printable\n\
+      \n\n\n<hr>\n\n<h4>You can view, comment on, or merge this pull request online\
+      \ at:</h4>\n<p>&nbsp;&nbsp;<a href=3D'https://github.com/halon/engage-demo/pull/35?em=\n\
+      ail_source=3Dnotifications&amp;email_token=3DACNIJAVSRNEIN4HA2VQJ3PT4TJUX=\n\
+      XA5CNFSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THE=\n\
+      ZLBONXW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVVYHEX3POBSW4X3DNRUWG2Y'>https://githu=\n\
+      b.com/halon/engage-demo/pull/35</a></p>\n\n<h4>Commit Summary</h4>\n<ul>\n \
+      \ <li><a href=3D\"https://github.com/halon/engage-demo/pull/35/commits/dc6=\n\
+      f1e0a5697a05a0cc422ed26f337b37d30859b?email_source=3Dnotifications&amp;em=\n\
+      ail_token=3DACNIJATTD4HBEQAVYX5LKHT4TJUXXA5CNFSNUABEM5UWIORPF5TWS5BNNB2WE=\n\
+      L2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLBONXW5KTTOVRHGY3SNFRGKZFFMV3GK3=\n\
+      TUV5YHEX3DN5WW22LUL5RWY2LDNM\" class=3D\"commit-link\">dc6f1e0</a>  add miss=\n\
+      ing service restart</li>\n</ul>\n\n<h4 style=3D\"display: inline-block\">File\
+      \ Changes </h4> <p style=3D\"displa=\ny: inline-block\">(<a href=3D\"https://github.com/halon/engage-demo/pull/35=\n\
+      /files?email_source=3Dnotifications&amp;email_token=3DACNIJATUUG4VY73J4OD=\n\
+      PQBL4TJUXXA5CNFSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3D=\n\
+      ANZYG6THEZLBONXW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVZYHEX3GNFWGK427MNWGSY3L\">1&n=\n\
+      bsp;file</a>)</p>\n<ul>\n  <li>\n    <strong>M</strong>\n    <a href=3D\"https://github.com/halon/engage-demo/pull/35/files?email_s=\n\
+      ource=3Dnotifications&amp;email_token=3DACNIJASVZ7WXBYHAYIM3A7D4TJUXXA5CN=\n\
+      FSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLBON=\n\
+      XW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVVYHEX3GNFWGKX3DNRUWG2Y#diff-0c625ff67cdf4e=\n\
+      c1e09c3624c2b5f2fc3f8935900cbaf8845333123acd10f070\">updateServer.sh</a>\n \
+      \   (2)\n  </li>\n</ul>\n\n<h4>Patch Links:</h4>\n<ul>\n  <li><a href=3D'https://github.com/halon/engage-demo/pull/35.patch?email=\n\
+      _source=3Dnotifications&amp;email_token=3DACNIJAXCAJHIBDHJWUPAXXL4TJUXXA5=\n\
+      CNFSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLB=\n\
+      ONXW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVZYHEX3QMF2GG2C7MNWGSY3L'>https://github.=\n\
+      com/halon/engage-demo/pull/35.patch</a></li>\n  <li><a href=3D'https://github.com/halon/engage-demo/pull/35.diff?email_=\n\
+      source=3Dnotifications&amp;email_token=3DACNIJAVYK4AT5C7DWRQXKY34TJUXXA5C=\n\
+      NFSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLBO=\n\
+      NXW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVVYHEX3ENFTGMX3DNRUWG2Y'>https://github.co=\n\
+      m/halon/engage-demo/pull/35.diff</a></li>\n</ul>\n\n<p style=3D\"font-size:small;-webkit-text-size-adjust:none;color:#666;\"\
+      >&m=\ndash;<br />Reply to this email directly, <a href=3D\"https://github.com/ha=\n\
+      lon/engage-demo/pull/35?email_source=3Dnotifications&amp;email_token=3DAC=\n\
+      NIJAUODGID5DN6NKQX2S34TJUXXA5CNFSNUABEM5UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2=\n\
+      WK43UF4ZTINRWGM3DANZYG6THEZLBONXW5KTTOVRHGY3SNFRGKZFFMV3GK3TUVRTG633UMVZF=\n\
+      6Y3MNFRWW\">view it on GitHub</a>, or <a href=3D\"https://github.com/notifi=\n\
+      cations/unsubscribe-auth/ACNIJAQN2RECUZRIYDIIE534TJUXXAVCNFSM6AAAAACXGDXZ=\n\
+      AGVHI2DSMVQWIX3LMV43ASLTON2WKOZUGE3TANBZHAZDCNQ\">unsubscribe</a>.<br />Yo=\n\
+      u are receiving this because you are subscribed to this thread.<img src=3D=\n\
+      \"https://github.com/notifications/beacon/ACNIJASLKAQW27EMNZVL75D4TJUXXBFC=\n\
+      NFSM6AAAAACXGDXZAGWGG33NNVSW45C7OR4XAZNFJFZXG5LFVJRW63LNMVXHIX3JMTHPRFGAV=\n\
+      CTHEZLBONXW5KTTOVRHGY3SNFRGKZA.gif\" height=3D\"1\" width=3D\"1\" alt=3D\"\"\
+      \ /><=\nspan style=3D\"color: transparent; font-size: 0; display: none; visibility=\n\
+      : hidden; overflow: hidden; opacity: 0; width: 0; height: 0; max-width: 0=\n\
+      ; max-height: 0; mso-hide: all\">Message ID: <span>&lt;halon/engage-demo/p=\n\
+      ull/35</span><span>@</span><span>github</span><span>.</span><span>com&gt;=\n\
+      </span></span></p>\n<script type=3D\"application/ld+json\">[\n{\n\"@context\"\
+      : \"http://schema.org\",\n\"@type\": \"EmailMessage\",\n\"potentialAction\"\
+      : {\n\"@type\": \"ViewAction\",\n\"target\": \"https://github.com/halon/engage-demo/pull/35?email_source=3Dno=\n\
+      tifications\\u0026email_token=3DACNIJAVEJBLCMLIJYAA2O7D4TJUXXA5CNFSNUABEM5=\n\
+      UWIORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLBONXW5KTTOVR=\n\
+      HGY3SNFRGKZFFMV3GK3TUVNTW2YLJNRPWG3DJMNVQ\",\n\"url\": \"https://github.com/halon/engage-demo/pull/35?email_source=3Dnotif=\n\
+      ications\\u0026email_token=3DACNIJAVEJBLCMLIJYAA2O7D4TJUXXA5CNFSNUABEM5UWI=\n\
+      ORPF5TWS5BNNB2WEL2QOVWGYUTFOF2WK43UF4ZTINRWGM3DANZYG6THEZLBONXW5KTTOVRHGY=\n\
+      3SNFRGKZFFMV3GK3TUVNTW2YLJNRPWG3DJMNVQ\",\n\"name\": \"View Pull Request\"\n\
+      },\n\"description\": \"View this Pull Request on GitHub\",\n\"publisher\": {\n\
+      \"@type\": \"Organization\",\n\"name\": \"GitHub\",\n\"url\": \"https://github.com\"\
+      \n}\n}\n]</script>\n\n----==_mimepart_69ca71fb956e1_a81108252097--\n"
+    id: test.eml
+  - data: |
+      import $mail from "test.eml";
+      import $attachment from "test.txt";
+      import { PDF } from "extras://pdf";
+
+      $body = $mail->findByType(#/^text\/html$/) ?: $mail->getType() == "text/html" ? [$mail] : [];
+      // $body = $mail->findByType(#/^text\/plain$/) ?: $mail->getType() == "text/plain" ? [$mail] : [];
+
+      $pdf = PDF($body[0]->getBody(), ["format" => $body[0]->getType()]);
+      $pdf->addAttachment("test.txt", $attachment, ["desc" => "Test attachment"]);
+      $test = $pdf->toString(["password" => "test"]);
+      echo $test;
+    id: test.hsl
+  - data: |-
+      Foo Bar Baz
+    id: test.txt
+servers:
+- id: default
+  transport: mx
+transportgroups:
+- dsn:
+    transport: mx
+  id: default
+  retry:
+    count: 30
+    intervals:
+    - interval: 60
+    - interval: 900
+    - interval: 3600
+      notify: true
+    - interval: 7200
+    - interval: 10800
+  transports:
+  - id: mx
+    session:
+      tls:
+        mode: dane
+version: '6.0'

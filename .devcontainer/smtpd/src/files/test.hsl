@@ -1,0 +1,11 @@
+import $mail from "test.eml";
+import $attachment from "test.txt";
+import { PDF } from "extras://pdf";
+
+$body = $mail->findByType(#/^text\/html$/) ?: $mail->getType() == "text/html" ? [$mail] : [];
+// $body = $mail->findByType(#/^text\/plain$/) ?: $mail->getType() == "text/plain" ? [$mail] : [];
+
+$pdf = PDF($body[0]->getBody(), ["format" => $body[0]->getType()]);
+$pdf->addAttachment("test.txt", $attachment, ["desc" => "Test attachment"]);
+$test = $pdf->toString(["password" => "test"]);
+echo $test;
