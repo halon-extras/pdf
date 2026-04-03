@@ -44,9 +44,6 @@ RUN /usr/local/go/bin/go install github.com/CycloneDX/cyclonedx-gomod/cmd/cyclon
 RUN /usr/local/go/bin/go install github.com/google/go-licenses/v2@latest
 ENV PATH="$PATH:/usr/local/go/bin:/root/go/bin"
 
-RUN mkdir /licenses
-RUN cp /usr/local/go/LICENSE /licenses/LICENSE.go
-
 RUN apt-get update && apt-get install -y weasyprint
 
 RUN rm -rf /tmp/halon
