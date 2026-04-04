@@ -18,6 +18,12 @@ apt-get install halon-extras-pdf
 yum install halon-extras-pdf
 ```
 
+### Azure Linux
+
+```
+tdnf install -y halon-extras-pdf
+```
+
 > [!WARNING]
 > When using RHEL you need to manually install `weasyprint` binary so it can be executed globally if you want to create PDF files from `text/html`.
 
