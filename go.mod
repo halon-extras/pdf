@@ -7,7 +7,7 @@ require github.com/pdfcpu/pdfcpu v0.11.1
 require (
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
-	github.com/hhrutter/pkcs7 v0.2.2 // indirect
+	github.com/hhrutter/pkcs7 v0.2.0 // indirect
 	github.com/hhrutter/tiff v1.0.3 // indirect
 	github.com/mattn/go-runewidth v0.0.22 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
