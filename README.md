@@ -6,6 +6,9 @@ This plugin has helper functions for working with PDF files.
 
 Follow the [instructions](https://docs.halon.io/manual/comp_install.html#installation) in our manual to add our package repository and then run the below command.
 
+> [!IMPORTANT]
+> You need to manually install `weasyprint` version `67.0` or later and make it globally executable if you want to create PDF files from `text/html`.
+
 ### Ubuntu
 
 ```
@@ -18,17 +21,11 @@ apt-get install halon-extras-pdf
 yum install halon-extras-pdf
 ```
 
-> [!IMPORTANT]
-> When using RHEL you need to manually install `weasyprint` binary so it can be executed globally if you want to create PDF files from `text/html`.
-
 ### Azure Linux
 
 ```
 tdnf install -y halon-extras-pdf
 ```
-
-> [!IMPORTANT]
-> When using Azure Linux you need to manually install `weasyprint` binary so it can be executed globally if you want to create PDF files from `text/html`.
 
 ## Exported classes
 
@@ -45,6 +42,10 @@ Create a new PDF.
 The following options are available in the options array.
 
 - format `string` - The format for the content. Can be `text/plain` or `text/html`. The default is `text/plain`.
+- protocols `array` - The protocols to support during URL resolution when `format` is `text/html`. The supported values are `file`, `http`, `https`, `data` and `ftp`. The default is to only support `data`.
+
+> [!WARNING]
+> You should not enable the `file` protocol when working with untrusted HTML.
 
 **Returns**: class object
 

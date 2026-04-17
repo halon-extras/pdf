@@ -39,7 +39,8 @@ RUN echo "machine repo.halon.io login ${HALON_REPO_USER} password ${HALON_REPO_P
 RUN apt-get update && apt-get install -y halon=6.10.0
 RUN /usr/bin/install -d /var/run/halon
 
-RUN apt-get update && apt-get install -y weasyprint
+RUN apt-get update && apt-get install -y python3-pip libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 libharfbuzz-subset0
+RUN python3 -m pip install --upgrade --break-system-packages weasyprint
 
 COPY .devcontainer/entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh

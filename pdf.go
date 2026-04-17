@@ -9,6 +9,7 @@ import "C"
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os/exec"
 	"runtime/cgo"
 	"strconv"
@@ -20,7 +21,8 @@ import (
 )
 
 type PDFConstructorOptions struct {
-	Format string `json:"format"`
+	Format    string   `json:"format"`
+	Protocols []string `json:"protocols"`
 }
 
 type PDFAddAttachmentOptions struct {
@@ -35,8 +37,19 @@ type PDF struct {
 	ctx *pdfcpuModel.Context
 }
 
-func PDFFromHTML(data string) (*bytes.Buffer, error) {
-	cmd := exec.Command("weasyprint", "-", "-")
+func PDFFromHTML(data string, protocols []string) (*bytes.Buffer, error) {
+	args := []string{}
+	if len(protocols) > 0 {
+		for _, protocol := range protocols {
+			if protocol != "file" && protocol != "http" && protocol != "https" && protocol != "data" && protocol != "ftp" {
+				return nil, fmt.Errorf("unsupported protocol: %s", protocol)
+			}
+		}
+		args = append(args, "--allowed-protocols="+strings.Join(protocols, ","))
+	}
+	args = append(args, "-", "-")
+
+	cmd := exec.Command("weasyprint", args...)
 	cmd.Stdin = bytes.NewBufferString(data)
 	var buffer bytes.Buffer
 	cmd.Stdout = &buffer
@@ -157,7 +170,11 @@ func PDF_constructor(hhc *C.HalonHSLContext, args *C.HalonHSLArguments, ret *C.H
 	var buffer *bytes.Buffer
 	switch opts.Format {
 	case "text/html":
-		buffer, err = PDFFromHTML(data)
+		protocols := []string{"data"}
+		if len(opts.Protocols) > 0 {
+			protocols = opts.Protocols
+		}
+		buffer, err = PDFFromHTML(data, protocols)
 	case "text/plain":
 		buffer, err = PDFFromText(data)
 	}
