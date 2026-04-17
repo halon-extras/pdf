@@ -21,8 +21,8 @@ import (
 )
 
 type PDFConstructorOptions struct {
-	Format    string   `json:"format"`
-	Protocols []string `json:"protocols"`
+	Format    string    `json:"format"`
+	Protocols *[]string `json:"protocols"`
 }
 
 type PDFAddAttachmentOptions struct {
@@ -171,8 +171,8 @@ func PDF_constructor(hhc *C.HalonHSLContext, args *C.HalonHSLArguments, ret *C.H
 	switch opts.Format {
 	case "text/html":
 		protocols := []string{"data"}
-		if len(opts.Protocols) > 0 {
-			protocols = opts.Protocols
+		if opts.Protocols != nil {
+			protocols = *opts.Protocols
 		}
 		buffer, err = PDFFromHTML(data, protocols)
 	case "text/plain":
