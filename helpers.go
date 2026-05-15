@@ -6,6 +6,7 @@ package main
 //typedef void (*free_fn)(void*);
 import "C"
 import (
+	"errors"
 	"fmt"
 	"unsafe"
 )
@@ -95,4 +96,19 @@ func HSLValueSetString(ret *C.HalonHSLValue, val string) {
 	y := unsafe.Pointer(x)
 	defer C.free(y)
 	C.HalonMTA_hsl_value_set(ret, C.HALONMTA_HSL_TYPE_STRING, y, C.size_t(len(val)))
+}
+
+func GetConfigAsJSON(cfg *C.HalonConfig) (string, error) {
+	var x *C.char
+	y := C.HalonMTA_config_to_json(cfg, &x, nil)
+	defer C.free(unsafe.Pointer(x))
+	if y {
+		return C.GoString(x), nil
+	} else {
+		if x != nil {
+			return "", errors.New(C.GoString(x))
+		} else {
+			return "", errors.New("failed to get config")
+		}
+	}
 }

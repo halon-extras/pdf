@@ -43,6 +43,19 @@ The following options are available in the options array.
 
 - format `string` - The format for the content. Can be `text/plain` or `text/html`. The default is `text/plain`.
 - protocols `array` - The protocols to support during URL resolution when `format` is `text/html`. The supported values are `file`, `http`, `https`, `data` and `ftp`. The default is to only support `data`.
+- media `string` - Set type of device for the content when `format` is `text/html`. Supported values are `screen` or `print`. The default is `print`.
+- presentationalhints `boolean` - Follow HTML presentational hints when `format` is `text/html`. The default is `true`.
+- stylesheets `array` - IDs of stylesheets defined in the config. Only used when `format` is `text/html`.
+
+#### How to define stylesheets
+```yaml
+# smtpd-app.yaml
+plugins:
+  - id: "pdf"
+    config:
+      stylesheets:
+        brand: "/path/to/your/files/brand.css"
+```
 
 > [!WARNING]
 > You should not enable the `file` protocol when working with untrusted HTML.

@@ -1,0 +1,12 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "description": "pdf schema",
+    "additionalProperties": false,
+    "properties": {
+        "stylesheets": {
+            "type": "object",
+            "description": "Defined stylesheets by absolute paths named with an id"
+        }
+    }
+}

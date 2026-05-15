@@ -10,10 +10,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
 	"runtime/cgo"
 	"strconv"
 	"strings"
+	"sync"
 	"unsafe"
 
 	pdfcpuApi "github.com/pdfcpu/pdfcpu/pkg/api"
@@ -21,8 +23,11 @@ import (
 )
 
 type PDFConstructorOptions struct {
-	Format    string    `json:"format"`
-	Protocols *[]string `json:"protocols"`
+	Format              string    `json:"format"`
+	Protocols           *[]string `json:"protocols"`
+	Media               string    `json:"media"`
+	PresentationalHints *bool     `json:"presentationalhints"`
+	Stylesheets         *[]string `json:"stylesheets"`
 }
 
 type PDFAddAttachmentOptions struct {
@@ -33,11 +38,18 @@ type PDFtoStringOptions struct {
 	Password string `json:"password"`
 }
 
+type Config struct {
+	Stylesheets map[string]string `json:"stylesheets"`
+}
+
 type PDF struct {
 	ctx *pdfcpuModel.Context
 }
 
-func PDFFromHTML(data string, protocols []string) (*bytes.Buffer, error) {
+var config *Config
+var configLock sync.Mutex
+
+func PDFFromHTML(data string, protocols []string, stylesheets []string, media string, presentationalHints bool) (*bytes.Buffer, error) {
 	args := []string{}
 	if len(protocols) > 0 {
 		for _, protocol := range protocols {
@@ -47,6 +59,33 @@ func PDFFromHTML(data string, protocols []string) (*bytes.Buffer, error) {
 		}
 		args = append(args, "--allowed-protocols="+strings.Join(protocols, ","))
 	}
+
+	for _, stylesheet := range stylesheets {
+		var path string
+		configLock.Lock()
+		if config != nil {
+			p, ok := config.Stylesheets[stylesheet]
+			if ok {
+				path = p
+			}
+
+		}
+		configLock.Unlock()
+		if path == "" {
+			return nil, fmt.Errorf("stylesheet not found: %s", stylesheet)
+		}
+		if _, err := os.Stat(path); err != nil {
+			return nil, fmt.Errorf("stylesheet file not accessible: %s", stylesheet)
+		}
+		args = append(args, "--stylesheet="+path)
+	}
+
+	args = append(args, "--media-type="+media)
+
+	if presentationalHints {
+		args = append(args, "--presentational-hints")
+	}
+
 	args = append(args, "-", "-")
 
 	cmd := exec.Command("weasyprint", args...)
@@ -174,7 +213,28 @@ func PDF_constructor(hhc *C.HalonHSLContext, args *C.HalonHSLArguments, ret *C.H
 		if opts.Protocols != nil {
 			protocols = *opts.Protocols
 		}
-		buffer, err = PDFFromHTML(data, protocols)
+
+		stylesheets := []string{}
+		if opts.Stylesheets != nil {
+			stylesheets = *opts.Stylesheets
+		}
+
+		if opts.Media != "" {
+			opts.Media = strings.ToLower(opts.Media)
+			if opts.Media != "print" && opts.Media != "screen" {
+				HSLValueSetException(hhc, "unsupported media: "+opts.Media)
+				return
+			}
+		} else {
+			opts.Media = "print"
+		}
+
+		if opts.PresentationalHints == nil {
+			defaultPresentationalHints := true
+			opts.PresentationalHints = &defaultPresentationalHints
+		}
+
+		buffer, err = PDFFromHTML(data, protocols, stylesheets, opts.Media, *opts.PresentationalHints)
 	case "text/plain":
 		buffer, err = PDFFromText(data)
 	}
@@ -298,8 +358,55 @@ func PDF_toString(hhc *C.HalonHSLContext, args *C.HalonHSLArguments, ret *C.Halo
 
 //export Halon_init
 func Halon_init(hic *C.HalonInitContext) C.bool {
+	var raw_config *C.HalonConfig
+
+	if C.HalonMTA_init_getinfo(hic, C.HALONMTA_INIT_APPCONFIG, nil, 0, unsafe.Pointer(&raw_config), nil) {
+		cfg, err := GetConfigAsJSON(raw_config)
+		if err != nil {
+			if err.Error() != "failed to get config" {
+				return false
+			}
+		} else {
+			var parsed Config
+			if err := json.Unmarshal([]byte(cfg), &parsed); err != nil {
+				return false
+			}
+
+			configLock.Lock()
+			config = &parsed
+			configLock.Unlock()
+		}
+	}
+
 	pdfcpuApi.DisableConfigDir()
 	return true
+}
+
+//export Halon_config_reload
+func Halon_config_reload(hc *C.HalonConfig) {
+	cfg, err := GetConfigAsJSON(hc)
+
+	if err != nil {
+		if err.Error() != "failed to get config" {
+			configLock.Lock()
+			config = nil
+			configLock.Unlock()
+			return
+		}
+	}
+
+	var parsed Config
+	if err := json.Unmarshal([]byte(cfg), &parsed); err != nil {
+		configLock.Lock()
+		config = nil
+		configLock.Unlock()
+		return
+	}
+
+	configLock.Lock()
+	config = &parsed
+	configLock.Unlock()
+
 }
 
 //export Halon_hsl_register
